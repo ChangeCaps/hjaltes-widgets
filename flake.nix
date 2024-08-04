@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
+    systems.url = "github:nix-systems/default-linux";
 
     lute = {
       url = "github:ChangeCaps/lute";
@@ -11,21 +11,20 @@
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, lute, ... }: 
-    flake-utils.lib.eachDefaultSystem (system:
-      let pkgs = nixpkgs.legacyPackages.${system}; in {
-        packages = rec {
-          hjaltes-widgets = import ./. { 
-            inherit pkgs; 
-            inherit lute;
-          };
-          default = hjaltes-widgets;
+  outputs = { self, nixpkgs, systems, lute, ... }: {
+    packages = nixpkgs.lib.genAttrs (import systems) (system:
+      let pkgs = nixpkgs.legacyPackages.${system}; in rec {
+        hjaltes-widgets = import ./. { 
+          inherit pkgs; 
+          inherit lute;
         };
-
-        homeManagerModules = rec {
-          hjaltes-widgets = import ./hm_module.nix self;
-          default = hjaltes-widgets;
-        };
+        default = hjaltes-widgets; 
       }
     );
+
+    homeManagerModules = rec {
+      hjaltes-widgets = import ./hm_module.nix self;
+      default = hjaltes-widgets;
+    };
+  };
 }
