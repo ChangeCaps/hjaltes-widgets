@@ -22,7 +22,10 @@
           default = hjaltes-widgets;
         };
 
-        homeManagerModules = import ./home.nix self;
+        homeManagerModules = rec {
+          hjaltes-widgets = import ./hm_module.nix self;
+          default = hjaltes-widgets;
+        };
       }
     );
 }
