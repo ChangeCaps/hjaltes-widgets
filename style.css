@@ -1,0 +1,9 @@
+#volume-popup {
+    border-radius: 6px;
+    border: 1px solid;
+    padding: 20px;
+}
+
+#volume-icon {
+    font-size: 20px;
+}

@@ -1,0 +1,28 @@
+{ pkgs, lute }:
+
+pkgs.stdenv.mkDerivation {
+  name = "hjaltes-widgets";
+  src = ./.;
+
+  nativeBuildInputs = [
+    pkgs.clang-tools
+    pkgs.clang
+    pkgs.pkg-config
+    lute.packages.${pkgs.system}.lute
+  ];
+
+  buildInputs = [
+    pkgs.gtk4
+    pkgs.gtk4-layer-shell
+    pkgs.pulseaudio
+  ];
+
+  buildPhase = ''
+    lute build
+  '';
+
+  installPhase = ''
+    mkdir -p $out/bin
+    cp out/hjaltes-widgets/hjaltes-widgets $out/bin
+  '';
+}
