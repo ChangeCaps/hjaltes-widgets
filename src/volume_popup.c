@@ -35,7 +35,7 @@ static GtkWidget *build_ui(Data *data) {
 static void build_window(GtkWindow *window) {
     // initialize the gtk layer shell
     gtk_layer_init_for_window(window);
-    gtk_layer_set_layer(window, GTK_LAYER_SHELL_LAYER_TOP);
+    gtk_layer_set_layer(window, GTK_LAYER_SHELL_LAYER_OVERLAY);
 
     // set the margin and anchor
     gtk_layer_set_margin(window, GTK_LAYER_SHELL_EDGE_TOP, 20);
