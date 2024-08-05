@@ -2,6 +2,8 @@
 
 pkgs.stdenv.mkDerivation {
   name = "hjaltes-widgets";
+  version = "0.1.0";
+
   src = ./.;
 
   nativeBuildInputs = [

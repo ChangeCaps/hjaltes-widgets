@@ -4,10 +4,14 @@
 
 #define BUFFER_SIZE 1024
 
+const char *argument_style_path = NULL;
+
 void add_css_provider() {
     char style_path[BUFFER_SIZE];
 
-    if (getenv("XDG_CONFIG_HOME")) {
+    if (argument_style_path) {
+        snprintf(style_path, BUFFER_SIZE, "%s", argument_style_path);
+    } else if (getenv("XDG_CONFIG_HOME")) {
         snprintf(style_path, BUFFER_SIZE, "%s/hjaltes-widgets/style.css",
                  getenv("XDG_CONFIG_HOME"));
     } else if (getenv("HOME")) {
