@@ -12,11 +12,12 @@
 typedef struct {
     GtkWindow *window;
     GtkWidget *progress;
+    GtkWidget *label;
     struct timespec last_update;
 } Data;
 
 static GtkWidget *build_ui(Data *data) {
-    GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
+    GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 16);
 
     data->progress = gtk_progress_bar_new();
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(data->progress), 0.5);
@@ -25,9 +26,9 @@ static GtkWidget *build_ui(Data *data) {
     gtk_widget_set_name(data->progress, "volume-bar");
     gtk_box_append(GTK_BOX(box), data->progress);
 
-    GtkWidget *label = gtk_label_new(" ");
-    gtk_widget_set_name(label, "volume-icon");
-    gtk_box_append(GTK_BOX(box), label);
+    data->label = gtk_label_new(" ");
+    gtk_widget_set_name(data->label, "volume-icon");
+    gtk_box_append(GTK_BOX(box), data->label);
 
     return box;
 }
@@ -100,10 +101,20 @@ static void volume_callback(pa_context *cx, const pa_sink_info *info, int eol,
         return;
     }
 
+    // get the progress bar
+    GtkProgressBar *progress = GTK_PROGRESS_BAR(data->progress);
+
+    // calculate the volume
+    double volume = (double)info->volume.values[0] / PA_VOLUME_NORM;
+    double current = gtk_progress_bar_get_fraction(progress);
+
+    // if the volume hasn't changed, we don't show the popup
+    if (fabs(volume - current) < 0.01) {
+        return;
+    }
+
     // update the progress bar
-    gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(data->progress),
-                                  (double)info->volume.values[0] /
-                                      PA_VOLUME_NORM);
+    gtk_progress_bar_set_fraction(progress, volume);
 
     // update the last update time
     clock_gettime(CLOCK_MONOTONIC, &data->last_update);

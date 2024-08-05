@@ -6,9 +6,13 @@
 
 int main(int argc, char **argv) {
     if (argc < 2) {
-        printf("Usage: %s <command>\n", argv[0]);
+        printf("Usage: %s <command> [options]\n", argv[0]);
+        printf("\n");
         printf("Commands:\n");
         printf("  volume-popup\n");
+        printf("\n");
+        printf("Options:\n");
+        printf("  --style <path>  Path to the CSS style file\n");
         return 1;
     }
 
