@@ -74,7 +74,7 @@ static GtkWidget *menu_button_new(const char *label) {
     gtk_widget_set_halign(button, GTK_ALIGN_FILL);
     gtk_widget_set_valign(button, GTK_ALIGN_CENTER);
 
-    gtk_widget_set_name(button, "power-menu-button");
+    gtk_widget_set_name(button, "config-menu-button");
 
     return button;
 }
