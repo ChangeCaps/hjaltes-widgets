@@ -1,3 +1,6 @@
+// Copyright (C) 2024  Hjalte C. Nannestad
+// See end of file for license information.
+
 #include <gtk/gtk.h>
 #include <gtk4-layer-shell.h>
 #include <pthread.h>
@@ -33,16 +36,14 @@ static GtkWidget *build_ui(Data *data) {
     return box;
 }
 
-static void build_window(GtkWindow *window) {
+static void init_window(GtkWindow *window) {
     // initialize the gtk layer shell
     gtk_layer_init_for_window(window);
     gtk_layer_set_layer(window, GTK_LAYER_SHELL_LAYER_OVERLAY);
 
     // set the margin and anchor
-    gtk_layer_set_margin(window, GTK_LAYER_SHELL_EDGE_TOP, 20);
     gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_TOP, true);
-
-    gtk_window_set_decorated(window, false);
+    gtk_layer_set_margin(window, GTK_LAYER_SHELL_EDGE_TOP, 20);
 
     gtk_widget_set_name(GTK_WIDGET(window), "volume-popup");
 
@@ -53,7 +54,7 @@ static void build_window(GtkWindow *window) {
 static void activate(GtkApplication *app, Data *data) {
     // create the gtk window
     data->window = GTK_WINDOW(gtk_application_window_new(app));
-    build_window(data->window);
+    init_window(data->window);
 
     // add the css provider
     add_css_provider();
@@ -215,3 +216,19 @@ int volume_popup() {
 
     return status;
 }
+
+// This file is part of Hjalte's Widgets.
+// Copyright (C) 2024  Hjalte C. Nannestad
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.

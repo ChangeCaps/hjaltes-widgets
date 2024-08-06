@@ -3,9 +3,7 @@
 
 #pragma once
 
-extern const char *argument_style_path;
-
-void add_css_provider();
+int power_menu();
 
 // This file is part of Hjalte's Widgets.
 // Copyright (C) 2024  Hjalte C. Nannestad

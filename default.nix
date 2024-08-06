@@ -20,7 +20,7 @@ pkgs.stdenv.mkDerivation {
   ];
 
   buildPhase = ''
-    lute build
+    lute build hjaltes-widgets
   '';
 
   installPhase = ''
