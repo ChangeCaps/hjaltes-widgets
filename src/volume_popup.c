@@ -173,7 +173,7 @@ static void *mainloop_thread(void *arg) {
 int run_gtk_app(Data *data) {
     // create the gtk application
     GtkApplication *app = gtk_application_new("org.hjalte.widgets.volume-popup",
-                                              G_APPLICATION_IS_SERVICE);
+                                              G_APPLICATION_DEFAULT_FLAGS);
 
     // connect the activate signal and run the application
     g_signal_connect(app, "activate", G_CALLBACK(activate), data);
