@@ -135,7 +135,7 @@ static void activate(GtkApplication *app, void *data) {
 
 int power_menu() {
     GtkApplication *app = gtk_application_new("com.hjalte.widgets.power-menu",
-                                              G_APPLICATION_DEFAULT_FLAGS);
+                                              G_APPLICATION_IS_SERVICE);
 
     g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
     int status = g_application_run(G_APPLICATION(app), 0, NULL);
