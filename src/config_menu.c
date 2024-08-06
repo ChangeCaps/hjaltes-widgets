@@ -4,7 +4,7 @@
 #include <gtk/gtk.h>
 #include <gtk4-layer-shell.h>
 
-#include "power_menu.h"
+#include "config_menu.h"
 #include "style.h"
 
 static void init_window(GtkWindow *window) {
@@ -16,25 +16,10 @@ static void init_window(GtkWindow *window) {
     gtk_layer_set_margin(window, GTK_LAYER_SHELL_EDGE_TOP, 8);
     gtk_layer_set_margin(window, GTK_LAYER_SHELL_EDGE_RIGHT, 16);
 
-    gtk_widget_set_name(GTK_WIDGET(window), "power-menu");
+    gtk_widget_set_name(GTK_WIDGET(window), "config-menu");
 
     gtk_widget_set_valign(GTK_WIDGET(window), GTK_ALIGN_CENTER);
     gtk_widget_set_halign(GTK_WIDGET(window), GTK_ALIGN_CENTER);
-}
-
-static GtkWidget *menu_button_new(const char *label) {
-    GtkWidget *label_widget = gtk_label_new(label);
-    gtk_widget_set_halign(label_widget, GTK_ALIGN_START);
-
-    GtkWidget *button = gtk_button_new();
-    gtk_button_set_child(GTK_BUTTON(button), label_widget);
-
-    gtk_widget_set_halign(button, GTK_ALIGN_FILL);
-    gtk_widget_set_valign(button, GTK_ALIGN_CENTER);
-
-    gtk_widget_set_name(button, "power-menu-button");
-
-    return button;
 }
 
 static void logout_clicked(GtkButton *button, void *data) {
@@ -73,9 +58,28 @@ static void shutdown_clicked(GtkButton *button, void *data) {
     }
 }
 
-static GtkWidget *build_ui(void *data) {
-    (void)data;
+static void cancel_clicked(GtkButton *button, GtkWindow *window) {
+    (void)button;
 
+    gtk_window_close(window);
+}
+
+static GtkWidget *menu_button_new(const char *label) {
+    GtkWidget *label_widget = gtk_label_new(label);
+    gtk_widget_set_halign(label_widget, GTK_ALIGN_START);
+
+    GtkWidget *button = gtk_button_new();
+    gtk_button_set_child(GTK_BUTTON(button), label_widget);
+
+    gtk_widget_set_halign(button, GTK_ALIGN_FILL);
+    gtk_widget_set_valign(button, GTK_ALIGN_CENTER);
+
+    gtk_widget_set_name(button, "power-menu-button");
+
+    return button;
+}
+
+static GtkWidget *build_ui(GtkWindow *window) {
     GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous(GTK_BOX(box), true);
     gtk_widget_set_halign(box, GTK_ALIGN_CENTER);
@@ -85,16 +89,19 @@ static GtkWidget *build_ui(void *data) {
     GtkWidget *suspend = menu_button_new("Suspend");
     GtkWidget *reboot = menu_button_new("Reboot");
     GtkWidget *shutdown = menu_button_new("Shutdown");
+    GtkWidget *cancel = menu_button_new("Cancel");
 
     g_signal_connect(logout, "clicked", G_CALLBACK(logout_clicked), NULL);
     g_signal_connect(suspend, "clicked", G_CALLBACK(suspend_clicked), NULL);
     g_signal_connect(reboot, "clicked", G_CALLBACK(reboot_clicked), NULL);
     g_signal_connect(shutdown, "clicked", G_CALLBACK(shutdown_clicked), NULL);
+    g_signal_connect(cancel, "clicked", G_CALLBACK(cancel_clicked), window);
 
     gtk_box_append(GTK_BOX(box), logout);
     gtk_box_append(GTK_BOX(box), suspend);
     gtk_box_append(GTK_BOX(box), reboot);
     gtk_box_append(GTK_BOX(box), shutdown);
+    gtk_box_append(GTK_BOX(box), cancel);
 
     return box;
 }
@@ -110,6 +117,7 @@ static void right_click(GtkGestureClick *gesture, int n_press, double x,
 }
 
 static void activate(GtkApplication *app, void *data) {
+    (void)data;
 
     GtkWindow *window = GTK_WINDOW(gtk_application_window_new(app));
     init_window(window);
@@ -117,7 +125,7 @@ static void activate(GtkApplication *app, void *data) {
     // add the css provider
     add_css_provider();
 
-    GtkWidget *ui = build_ui(data);
+    GtkWidget *ui = build_ui(window);
 
     // we want to exit when the window is right clicked
     GtkGesture *click_gesture = gtk_gesture_click_new();
@@ -133,8 +141,8 @@ static void activate(GtkApplication *app, void *data) {
     gtk_window_present(window);
 }
 
-int power_menu() {
-    GtkApplication *app = gtk_application_new("org.hjalte.widgets.power-menu",
+int config_menu() {
+    GtkApplication *app = gtk_application_new("org.hjalte.widgets.config-menu",
                                               G_APPLICATION_DEFAULT_FLAGS);
 
     g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);

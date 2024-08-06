@@ -3,7 +3,7 @@
 
 #pragma once
 
-int power_menu();
+int config_menu();
 
 // This file is part of Hjalte's Widgets.
 // Copyright (C) 2024  Hjalte C. Nannestad

@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "power_menu.h"
+#include "config_menu.h"
 #include "style.h"
 #include "volume_popup.h"
 
@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
         printf("\n");
         printf("Commands:\n");
         printf("  volume-popup\n");
-        printf("  power-menu\n");
+        printf("  config-menu\n");
         printf("\n");
         printf("Options:\n");
         printf("  --style <path>  Path to the CSS style file\n");
@@ -34,8 +34,8 @@ int main(int argc, char **argv) {
 
     if (strcmp(argv[1], "volume-popup") == 0)
         return volume_popup();
-    else if (strcmp(argv[1], "power-menu") == 0)
-        return power_menu();
+    else if (strcmp(argv[1], "config-menu") == 0)
+        return config_menu();
 
     printf("Unknown command: %s\n", argv[1]);
     return 1;

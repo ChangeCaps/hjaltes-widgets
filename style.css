@@ -36,28 +36,27 @@
 
 #volume-slider {}
 
-#power-menu {
+#config-menu {
     background-color: @base00;
 
     border-radius: 6px;
     border: 1px solid @base02;
 }
 
-#power-menu > box {
+#config-menu > box {
     padding: 16px;
     min-width: 120px;
 }
 
-#power-menu-button {
+#config-menu-button {
     background-color: transparent;
 }
 
-#power-menu-button:hover {
+#config-menu-button:hover {
     background-color: @base02;
-
     transition: background-color 0.2s;
 }
 
-#power-menu-button:focus {
+#config-menu-button:focus {
     outline: none;
 }
