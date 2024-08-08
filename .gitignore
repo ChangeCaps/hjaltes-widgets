@@ -1,6 +1,7 @@
 .cache/
 .direnv/
-out/
+lute-cache/
+lute-out/
 deps/
 result
 compile_commands.json

@@ -3,8 +3,9 @@
 pkgs.stdenv.mkDerivation {
   name = "hjaltes-widgets";
   version = "0.1.0";
-
   src = ./.;
+
+  outputs = ["out"];
 
   nativeBuildInputs = [
     pkgs.clang-tools
@@ -20,11 +21,10 @@ pkgs.stdenv.mkDerivation {
   ];
 
   buildPhase = ''
-    lute build hjaltes-widgets
+    lute build hjaltes-widgets --release
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp out/hjaltes-widgets/hjaltes-widgets $out/bin
+    lute install hjaltes-widgets --nix
   '';
 }

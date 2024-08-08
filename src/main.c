@@ -10,14 +10,16 @@
 
 int main(int argc, char **argv) {
     if (argc < 2) {
-        printf("Usage: %s <command> [options]\n", argv[0]);
-        printf("\n");
-        printf("Commands:\n");
-        printf("  volume-popup\n");
-        printf("  config-menu\n");
-        printf("\n");
-        printf("Options:\n");
-        printf("  --style <path>  Path to the CSS style file\n");
+        printf("Usage: %s <command> [options]\n"
+               "\n"
+               "Commands:\n"
+               "  volume-popup\n"
+               "  config-menu\n"
+               "\n"
+               "Options:\n"
+               "    --style <path>      Path to the CSS style file\n",
+               argv[0]);
+
         return 1;
     }
 
