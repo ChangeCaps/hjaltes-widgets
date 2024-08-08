@@ -5,8 +5,6 @@ pkgs.stdenv.mkDerivation {
   version = "0.1.0";
   src = ./.;
 
-  outputs = ["out"];
-
   nativeBuildInputs = [
     pkgs.clang-tools
     pkgs.clang

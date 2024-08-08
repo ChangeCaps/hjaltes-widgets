@@ -106,7 +106,7 @@ static void volume_callback(pa_context *cx, const pa_sink_info *info, int eol,
     GtkProgressBar *progress = GTK_PROGRESS_BAR(data->progress);
 
     // calculate the volume
-    double volume = (double)info->volume.values[0] / PA_VOLUME_NORM;
+    double volume = (double)info->volume.values[0] / (double)PA_VOLUME_NORM;
     double current = gtk_progress_bar_get_fraction(progress);
 
     // if the volume hasn't changed, we don't show the popup
