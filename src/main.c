@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
     for (int i = 0; i < argc; i++) {
         if (strcmp(argv[i], "--style") == 0) {
             if (i + 1 < argc) {
-                argument_style_path = argv[i + 1];
+                style_path = argv[i + 1];
             } else {
                 printf("Missing argument for --style\n");
                 return 1;

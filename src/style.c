@@ -7,29 +7,56 @@
 
 #define BUFFER_SIZE 1024
 
-const char *argument_style_path = NULL;
+const char *style_path = NULL;
+
+static bool get_style_path(char *path, int max_length) {
+    if (style_path) {
+        return snprintf(path, max_length, "%s", style_path);
+    } else if (getenv("XDG_CONFIG_HOME")) {
+        return snprintf(path, max_length, "%s/hjaltes-widgets/style.css",
+                        getenv("XDG_CONFIG_HOME"));
+    } else if (getenv("HOME")) {
+        return snprintf(path, max_length,
+                        "%s/.config/hjaltes-widgets/style.css", getenv("HOME"));
+    } else {
+        return false;
+    }
+}
+
+static void file_watcher_cb(GFileMonitor *monitor, GFile *file, GFile *other,
+                            GFileMonitorEvent event_type,
+                            GtkCssProvider *provider) {
+    (void)monitor;
+    (void)file;
+    (void)other;
+
+    if (event_type == G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT) {
+        gtk_css_provider_load_from_path(provider, style_path);
+    }
+}
 
 void add_css_provider() {
-    char style_path[BUFFER_SIZE];
+    // this function does leak memory, but it's not a big deal
 
-    if (argument_style_path) {
-        snprintf(style_path, BUFFER_SIZE, "%s", argument_style_path);
-    } else if (getenv("XDG_CONFIG_HOME")) {
-        snprintf(style_path, BUFFER_SIZE, "%s/hjaltes-widgets/style.css",
-                 getenv("XDG_CONFIG_HOME"));
-    } else if (getenv("HOME")) {
-        snprintf(style_path, BUFFER_SIZE,
-                 "%s/.config/hjaltes-widgets/style.css", getenv("HOME"));
-    } else {
-        printf("Could not find config directory.\n");
+    char new_path[BUFFER_SIZE];
+
+    if (!get_style_path(new_path, BUFFER_SIZE)) {
+        printf("Could not find style file\n");
         return;
     }
 
+    style_path = strdup(new_path);
     GtkCssProvider *provider = gtk_css_provider_new();
     gtk_css_provider_load_from_path(provider, style_path);
     gtk_style_context_add_provider_for_display(
         gdk_display_get_default(), GTK_STYLE_PROVIDER(provider),
         GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+    GFile *file = g_file_new_for_path(style_path);
+    GFileMonitor *monitor =
+        g_file_monitor_file(file, G_FILE_MONITOR_NONE, NULL, NULL);
+
+    g_signal_connect(monitor, "changed", G_CALLBACK(file_watcher_cb), provider);
 }
 
 // This file is part of Hjalte's Widgets.
