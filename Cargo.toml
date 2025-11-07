@@ -1,0 +1,12 @@
+[package]
+name = "hjaltes-widgets"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = "1"
+
+[dependencies.ori]
+package = "ori-gtk4"
+git = "https://github.com/ori-ui/ori"
+branch = "rewrite"

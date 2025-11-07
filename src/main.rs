@@ -1,0 +1,4 @@
+mod notify;
+
+fn main() {
+}
