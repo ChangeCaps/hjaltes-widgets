@@ -1,0 +1,61 @@
+window {
+    all: unset;
+
+    font-family: 'Ubuntu Sans';
+}
+
+.notification {
+    border-radius: 8px;
+    background: @theme_bg_color;
+    padding: 1rem;
+    margin: 0.5rem 1rem 0.5rem 1rem;
+    box-shadow: 2px 3px 8px 0 alpha(black, 0.4);
+    border: 1pt solid alpha(@theme_fg_color, 0.1);
+}
+
+.notification.critical {
+    border: 1pt solid alpha(red, 0.4);
+}
+
+.app-icon {
+    margin-right: 0.3rem;
+    min-width: 10px;
+}
+
+.app-name, .time {
+    font-size: 0.8rem;
+    color: alpha(@theme_fg_color, 0.5);
+}
+
+.summary {
+    font-size: 1.2rem;
+}
+
+.hint-image {
+    margin-right: 1.0rem;
+    border-radius: 9px;
+    min-width: 80px;
+    min-height: 80px;
+    background-size: cover;
+    background-position: center;
+}
+
+.body {
+    font-size: 1.0rem;
+    color: alpha(@theme_fg_color, 0.5);
+}
+
+.action {
+    border: none;
+    background: alpha(@theme_fg_color, 0.075);
+    transition: background 0.1s;
+    font-weight: bold;
+}
+
+.action:hover { 
+    background: alpha(@theme_fg_color, 0.1);
+}
+
+.action:active {
+    background: alpha(black, 0.05);
+}

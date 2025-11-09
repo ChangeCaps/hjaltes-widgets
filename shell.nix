@@ -5,5 +5,7 @@ pkgs.mkShell {
     pkgs.gtk4
     pkgs.gtk4-layer-shell
     pkgs.pkg-config
+    pkgs.dbus
+    pkgs.libadwaita
   ];
 }
