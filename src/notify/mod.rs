@@ -7,6 +7,15 @@ use dbus::{Message, Notification, Urgency};
 
 use crate::notify::dbus::CloseReason;
 
+pub fn run() -> anyhow::Result<()> {
+    App::new()
+        .css(include_css!("notify.css"))
+        .theme("Adwaita-dark")
+        .run(Data::new(), ui)?;
+
+    Ok(())
+}
+
 struct Data {
     connection: Option<dbus::Connection>,
     notifications: Vec<Notification>,
@@ -19,93 +28,6 @@ impl Data {
             notifications: Vec::new(),
         }
     }
-}
-
-fn notification_header(notification: &Notification) -> impl View<Data> + use<> {
-    let mut app_line = hline(Vec::new());
-
-    if let Some(ref app_icon) = notification.app_icon {
-        let app_icon = picture(app_icon.clone()).css_class("app-icon");
-        app_line.push(any(clamp_width(10, app_icon)));
-    }
-
-    let app_name = label(&notification.app_name)
-        .css_class("app-name")
-        .valign(Align::Center);
-
-    app_line.push(any(app_name));
-
-    let summary = label(&notification.summary)
-        .markup(true)
-        .ellipsize(Ellipsize::End)
-        .css_class("summary");
-
-    let time = label(notification.time.format("%H:%M"))
-        .css_class("time")
-        .valign(Align::Center);
-
-    let header = vline![
-        hline![
-            app_line.halign(Align::Start),
-            time.halign(Align::End).hexpand(true)
-        ],
-        summary.halign(Align::Start),
-    ];
-
-    let body = label(&notification.body)
-        .markup(true)
-        .wrap(Wrap::Word)
-        .css_class("body");
-
-    vline![header, body.halign(Align::Start)].css_class("header")
-}
-
-fn notification(notification: &Notification) -> impl View<Data> + use<> {
-    let mut view = hline(Vec::new());
-
-    if let Some(ref hint_image) = notification.hint_image {
-        let app_icon = clamp_width(75, picture(hint_image.clone()).css_class("hint-image"));
-        view.push(any(app_icon));
-    }
-
-    view.push(any(notification_header(notification)
-        .valign(Align::Start)
-        .hexpand(true)));
-
-    let mut actions = hline(Vec::new()).spacing(10);
-
-    for action in &notification.actions {
-        let action = button(label(&action[1]), {
-            let id = notification.id;
-            let key = action[0].clone();
-
-            move |data: &mut Data| {
-                let mut action = Action::new();
-
-                if let Some(ref conn) = data.connection {
-                    let message = Message::Close(id, None, CloseReason::Dismissed);
-                    action.add_event(Event::new(message, None));
-
-                    conn.action_invoked(id, key.clone());
-                }
-            }
-        })
-        .css_class("action")
-        .halign(Align::Fill)
-        .hexpand(true);
-
-        actions.push(any(action));
-    }
-
-    let view = vline![view, actions];
-
-    let classes = match notification.urgency {
-        Urgency::Low => "notification low",
-        Urgency::Normal => "notification normal",
-        Urgency::Critical => "notification critical",
-    };
-
-    clamp_width(400, view.css_class(classes)).width_request(400)
 }
 
 fn ui(data: &mut Data) -> impl Effect<Data> + use<> {
@@ -166,17 +88,96 @@ fn ui(data: &mut Data) -> impl Effect<Data> + use<> {
     let window = window(view)
         .visible(!data.notifications.is_empty())
         .is_layer_shell(true)
+        .layer(Layer::Overlay)
         .anchor_top(true)
         .anchor_right(true);
 
-    effects![on_event, task, window]
+    effects((on_event, task, window))
 }
 
-pub fn run() -> anyhow::Result<()> {
-    App::new()
-        .css(include_css!("notify.css"))
-        .theme("Adwaita-dark")
-        .run(Data::new(), ui)?;
+fn notification(notification: &Notification) -> impl View<Data> + use<> {
+    let mut view = hline(Vec::new());
 
-    Ok(())
+    if let Some(ref hint_image) = notification.hint_image {
+        let app_icon = clamp_width(75, picture(hint_image.clone()).css_class("hint-image"));
+        view.push(any(app_icon));
+    }
+
+    view.push(any(notification_header(notification)
+        .valign(Align::Start)
+        .hexpand(true)));
+
+    let mut actions = hline(Vec::new()).spacing(10);
+
+    for action in &notification.actions {
+        let action = button(label(&action[1]), {
+            let id = notification.id;
+            let key = action[0].clone();
+
+            move |data: &mut Data| {
+                let mut action = Action::new();
+
+                if let Some(ref conn) = data.connection {
+                    let message = Message::Close(id, None, CloseReason::Dismissed);
+                    action.add_event(Event::new(message, None));
+
+                    conn.action_invoked(id, key.clone());
+                }
+            }
+        })
+        .css_class("action")
+        .halign(Align::Fill)
+        .hexpand(true);
+
+        actions.push(any(action));
+    }
+
+    let view = vline((view, actions));
+
+    let classes = match notification.urgency {
+        Urgency::Low => "notification low",
+        Urgency::Normal => "notification normal",
+        Urgency::Critical => "notification critical",
+    };
+
+    clamp_width(400, view.css_class(classes)).width_request(400)
+}
+
+fn notification_header(notification: &Notification) -> impl View<Data> + use<> {
+    let mut app_line = hline(Vec::new());
+
+    if let Some(ref app_icon) = notification.app_icon {
+        let app_icon = picture(app_icon.clone()).css_class("app-icon");
+        app_line.push(any(clamp_width(10, app_icon)));
+    }
+
+    let app_name = label(&notification.app_name)
+        .css_class("app-name")
+        .valign(Align::Center);
+
+    app_line.push(any(app_name));
+
+    let summary = label(&notification.summary)
+        .markup(true)
+        .ellipsize(Ellipsize::End)
+        .css_class("summary");
+
+    let time = label(notification.time.format("%H:%M"))
+        .css_class("time")
+        .valign(Align::Center);
+
+    let header = vline((
+        hline((
+            app_line.halign(Align::Start),
+            time.halign(Align::End).hexpand(true),
+        )),
+        summary.halign(Align::Start),
+    ));
+
+    let body = label(&notification.body)
+        .markup(true)
+        .wrap(Wrap::Word)
+        .css_class("body");
+
+    vline((header, body.halign(Align::Start))).css_class("header")
 }

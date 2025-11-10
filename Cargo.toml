@@ -6,10 +6,13 @@ edition = "2024"
 [dependencies]
 anyhow = "1"
 chrono = "0.4"
-futures-timer = "3"
 image = "0.25"
 dbus = "0.9"
 dbus-crossroads = "0.5"
+
+[dependencies.tokio]
+version = "1"
+features = ["full"]
 
 [dependencies.clap]
 version = "4"
