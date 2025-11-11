@@ -18,6 +18,7 @@ use dbus::{
 };
 use dbus_crossroads::Crossroads;
 
+use futures_timer::Delay;
 use image::{DynamicImage, ImageBuffer};
 use ori::{Event, core::Proxy, views::ImageSource};
 
@@ -156,7 +157,7 @@ impl super::bus::OrgFreedesktopNotifications for Arc<dyn Proxy> {
             let proxy = self.clone();
 
             async move {
-                tokio::time::sleep(expire_duration).await;
+                Delay::new(expire_duration).await;
                 let message = Message::Close(id, Some(gn), CloseReason::Expired);
                 proxy.event(Event::new(message, None));
             }

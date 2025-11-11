@@ -7,5 +7,6 @@ pkgs.mkShell {
     pkgs.pkg-config
     pkgs.dbus
     pkgs.libadwaita
+    pkgs.librsvg
   ];
 }
