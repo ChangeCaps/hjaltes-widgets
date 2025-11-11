@@ -20,7 +20,7 @@ pub fn run() -> anyhow::Result<()> {
 }
 
 struct Data {
-    workspaces: Vec<Workspace>,
+    workspaces: Vec<Option<Workspace>>,
     monitors: Vec<Monitor>,
     clients: Vec<Client>,
     time: DateTime<Local>,
@@ -28,16 +28,27 @@ struct Data {
 
 impl Data {
     fn new() -> Self {
-        let mut this = Self {
-            workspaces: Workspaces::get().unwrap().into_iter().collect(),
+        Self {
+            workspaces: Self::get_workspaces(),
             monitors: Monitors::get().unwrap().into_iter().collect(),
             clients: Clients::get().unwrap().into_iter().collect(),
             time: Local::now(),
-        };
+        }
+    }
 
-        this.workspaces.sort_by_key(|w| w.id);
+    fn get_workspaces() -> Vec<Option<Workspace>> {
+        let mut actual: Vec<_> = Workspaces::get().unwrap().into_iter().collect();
+        let mut workspaces = Vec::new();
 
-        this
+        for id in 1..=10 {
+            if let Some(i) = actual.iter().position(|w| w.id == id) {
+                workspaces.push(Some(actual.remove(i)));
+            } else {
+                workspaces.push(None);
+            }
+        }
+
+        workspaces
     }
 }
 
@@ -78,20 +89,35 @@ fn monitor(data: &Data, monitor: &Monitor) -> impl Effect<Data> + use<> {
     .anchor_top(true)
     .anchor_left(true)
     .anchor_bottom(true)
-    .margin_top(8)
-    .margin_left(8)
-    .margin_bottom(8)
 }
 
 fn workspaces(data: &Data, monitor: &Monitor) -> impl View<Data> + use<> {
     vline(
         data.workspaces
             .iter()
-            .filter(|w| w.id >= 0)
-            .map(|w| any(workspace(data, monitor, w)))
+            .enumerate()
+            .map(|(i, w)| match w {
+                Some(w) => any(workspace(data, monitor, w)),
+                None => any(empty_workspace(i as i32 + 1)),
+            })
             .collect::<Vec<_>>(),
     )
     .spacing(10)
+}
+
+fn empty_workspace(id: i32) -> impl View<Data> + use<> {
+    let content = vline(()).width_request(28).height_request(28);
+
+    button(clamp_width(28, clamp_height(28, content)), move |_| {
+        Dispatch::call(DispatchType::Custom(
+            "focusworkspaceoncurrentmonitor",
+            &format!("{id}"),
+        ))
+        .unwrap();
+
+        Action::new()
+    })
+    .css_class("workspace")
 }
 
 fn workspace(data: &Data, monitor: &Monitor, workspace: &Workspace) -> impl View<Data> + use<> {
