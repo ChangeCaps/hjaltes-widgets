@@ -5,9 +5,9 @@ use ori::prelude::*;
 
 use dbus::{Message, Notification, Urgency};
 
-use crate::notify::dbus::CloseReason;
+use dbus::CloseReason;
 
-pub fn run() -> anyhow::Result<()> {
+fn main() -> anyhow::Result<()> {
     App::new()
         .css(include_css!("notify.css"))
         .theme("Adwaita-dark")

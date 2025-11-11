@@ -10,7 +10,7 @@ use hyprland::{
 };
 use ori::prelude::*;
 
-pub fn run() -> anyhow::Result<()> {
+fn main() -> anyhow::Result<()> {
     App::new()
         .css(include_css!("bar.css"))
         .theme("Adwaita-dark")

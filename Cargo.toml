@@ -27,3 +27,11 @@ branch = "rewrite"
 
 package = "ori-gtk4"
 features = ["image", "adwaita", "layer-shell"]
+
+[[bin]]
+name = "hjaltes-bar"
+path = "src/bin/bar/main.rs"
+
+[[bin]]
+name = "hjaltes-notify"
+path = "src/bin/notify/main.rs"
