@@ -8,5 +8,6 @@ pkgs.mkShell {
     pkgs.dbus
     pkgs.libadwaita
     pkgs.librsvg
+    pkgs.icon-library
   ];
 }

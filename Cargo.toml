@@ -6,11 +6,19 @@ edition = "2024"
 [dependencies]
 anyhow = "1"
 chrono = "0.4"
-image = "0.25"
 dbus = "0.9"
 dbus-crossroads = "0.5"
 freedesktop-icons = "0.4"
 futures-timer = "3"
+image = "0.25"
+mpris = "2"
+pulseaudio = "0.3"
+async-compat = "0.2"
+
+[dependencies.reqwest]
+version = "0.12"
+default-features = false
+features = ["rustls-tls"]
 
 [dependencies.hyprland]
 version = "0.4.0-beta.3"
@@ -22,11 +30,17 @@ version = "4"
 features = ["derive"]
 
 [dependencies.ori]
-git = "https://github.com/ori-ui/ori"
-branch = "rewrite"
+# git = "https://github.com/ori-ui/ori"
+# branch = "rewrite"
+
+path = "../ori/crates/ori-gtk4"
 
 package = "ori-gtk4"
-features = ["image", "adwaita", "layer-shell"]
+features = [
+  "image",
+  "adwaita",
+  "layer-shell",
+]
 
 [[bin]]
 name = "hjaltes-bar"

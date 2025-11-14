@@ -95,7 +95,6 @@ impl super::bus::OrgFreedesktopNotifications for Arc<dyn Proxy> {
         Ok(vec![
             String::from("actions"),
             String::from("body"),
-            String::from("body-hyperlinks"),
             String::from("icon-static"),
         ])
     }

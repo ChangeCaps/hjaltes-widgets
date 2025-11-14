@@ -1,0 +1,163 @@
+window {
+    font-family: 'Ubuntu Light';
+}
+
+.bar {
+    padding: 8pt;
+}
+
+.menu-button {
+    background: none;
+    border: none;
+
+    padding: 0;
+    margin-top: 1rem;
+    min-width: 2rem;
+    min-height: 2rem;
+}
+
+.menu-button.open {
+    color: #8caaee;
+}
+
+.menu-button.closed {
+    color: alpha(@theme_fg_color, 0.3);
+}
+
+.menu {
+    min-width: 300pt;
+    background: #282828;
+    padding: 2rem 1rem 1rem 1rem;
+}
+
+.sub-menu {
+    padding: 1rem;
+    background: alpha(black, 0.3);
+    border-radius: 12pt;
+}
+
+.media-art {
+    min-width: 80px;
+    min-height: 80px;
+    border-radius: 9pt;
+    margin-right: 1rem;
+}
+
+.media-title {
+    margin-bottom: 0.2rem;
+    font-size: 1.2rem;
+    color: alpha(@theme_fg_color, 0.8);
+}
+
+.media-artists {
+    font-size: 1rem;
+    color: alpha(@theme_fg_color, 0.5);
+}
+
+.media-player progressbar {
+    margin-bottom: 0.5rem;
+    margin-top: 0.8rem;
+}
+
+.media-player progressbar trough {
+    min-height: 6pt;
+    background: alpha(black, 0.3);
+    border-radius: 4pt;
+    border: none;
+}
+
+.media-player progressbar trough progress {
+    min-height: 6pt;
+    min-width: 0;
+    background: #a6d189;
+    border-radius: 4pt;
+    border: none;
+}
+
+.media-player button {
+    padding: 0;
+    background: none;
+    border: none;
+    color: alpha(@theme_fg_color, 0.3);
+
+    min-width: 2rem;
+    min-height: 2rem;
+
+    transition: color 0.1s;
+}
+
+.media-player button:hover {
+    color: alpha(@theme_fg_color, 0.4);
+}
+
+.media-player button:active {
+    color: alpha(@theme_fg_color, 0.2);
+}
+
+.media-time {
+    color: alpha(@theme_fg_color, 0.3);
+}
+
+.workspace-icons {
+    padding: 2.5pt;
+    background: alpha(@theme_fg_color, 0.01);
+    border-radius: 16px;
+    border: 1pt solid alpha(@theme_fg_color, 0.04);
+
+    transition: background 0.1s;
+    transition: border 0.1s;
+}
+
+.workspace-icons:hover {
+    background: alpha(@theme_fg_color, 0.04);
+}
+
+.workspace-icons:active {
+    background: alpha(black, 0.04);
+    border-color: #a6d189;
+}
+
+.workspace-icons.active {
+    border-color: #a6d189;
+}
+
+.workspace-icons.other {
+    border-color: #b5bfe2;
+}
+
+.workspace-line {
+    margin: 4px;
+
+    padding: 0;
+    border-radius: 3pt;
+
+    min-width: 6pt;
+    min-height: 14pt;
+
+    border: none;
+    background: alpha(@theme_fg_color, 0.12);
+
+    transition: min-height 0.1s linear;
+}
+
+.workspace-line.active { 
+    min-height: 24pt;
+    background: #a6d189;
+}
+
+.workspace-line.other { 
+    min-height: 20pt;
+    background: #b5bfe2;
+}
+
+.workspace-line.used {
+    min-height: 16pt;
+    background: alpha(@theme_fg_color, 0.3);
+}
+
+.time {
+    color: alpha(@theme_fg_color, 0.3);
+    font-size: 1.3rem;
+    font-weight: bold;
+    padding-bottom: 1rem;
+}
