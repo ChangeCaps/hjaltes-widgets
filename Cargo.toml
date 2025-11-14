@@ -31,8 +31,6 @@ features = ["derive"]
 
 [dependencies.ori]
 git = "https://github.com/ori-ui/ori"
-branch = "rewrite"
-
 # path = "../ori/crates/ori-gtk4"
 
 package = "ori-gtk4"
